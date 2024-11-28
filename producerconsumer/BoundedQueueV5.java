@@ -48,16 +48,16 @@ public class BoundedQueueV5 implements BoundedQueue {
         lock.lock();
         try {
             while (queue.isEmpty()) {
-                log("[take] 큐에 데이터가 없음, 소비자 대기");
+                log("[take] Queue is empty, consumer waiting");
                 try {
                     consumerCond.await();
-                    log("[take] 소비자 깨어남");
+                    log("[take] Consumer wakes up");
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
             String data = queue.poll();
-            log("[take] 소비자 데이터 획득, producerCond.signal() 호출");
+            log("[take] Consumer acquired data, calling producerCond.signal()");
             producerCond.signal();
             return data;
         } finally {
